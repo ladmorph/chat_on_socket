@@ -10,16 +10,17 @@ import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Date;
+import java.util.logging.Logger;
 
 public class AuthServer {
-
 
     private ServerSocket serverSocket;
     private BufferedReader reader;
     private BufferedWriter writer;
 
-    public AuthServer() {
-    }
+    private static final Logger logger = Logger.getLogger(AuthServer.class.getName());
+
+    public AuthServer() {}
 
     public Thread start() {
         Thread thread = new Thread(new Runnable() {
@@ -27,7 +28,7 @@ public class AuthServer {
             public void run() {
                 try {
                     serverSocket = new ServerSocket(7070);
-                    System.out.println("Starting server with 7070 port");
+                    logger.info("ServerChat starting with: 7070 port!");
                     while (true) {
                         Socket socket = serverSocket.accept();
                         reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));

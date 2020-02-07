@@ -57,7 +57,7 @@ public class UserDao {
         Transaction tx = session.beginTransaction();
 
         Query query = session.createSQLQuery
-                ("UPDATE users SET messages =" + messages + " WHERE username = '" + username + "'");
+                ("UPDATE users SET messages = " + messages + " WHERE username = '" + username + "'");
         query.executeUpdate();
         tx.commit();
     }

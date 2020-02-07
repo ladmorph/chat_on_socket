@@ -3,16 +3,20 @@ package serverChat;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.logging.Logger;
 
 public class ServerChat {
 
 
-    ServerChatConfiguration cfg;
-    private ArrayList<ClientHandler> clients = new ArrayList<>();
+    private static final Logger logger = Logger.getLogger(ServerSocket.class.getName());
+    private ServerChatConfiguration cfg;
+    private Set<ClientHandler> clients;
 
     public ServerChat(ServerChatConfiguration cfg) {
         this.cfg = cfg;
+        clients = new HashSet<>();
     }
 
     public void sendMessageToAll(String message) {
@@ -21,15 +25,16 @@ public class ServerChat {
     }
 
     public Thread start() {
+
         Thread thread = new Thread() {
             public void run() {
                 try {
-
                     ServerSocket serverSocket = new ServerSocket(cfg.getPort());
-                    System.out.println("Server starting with 8080 port");
+                    logger.info("ServerChat starting with: " + cfg.getPort() + " port!");
                     while (true) {
                         Socket socket = serverSocket.accept();
-                        ClientHandler clientHandler = new ClientHandler(socket, ServerChat.this);
+                        logger.info("New user connected.");
+                        ClientHandler clientHandler = new ClientHandler(socket, ServerChat.this, cfg);
                         clients.add(clientHandler);
                         new Thread(clientHandler).start();
 
@@ -41,6 +46,10 @@ public class ServerChat {
             }
         };
         return thread;
+    }
+
+    public void removeClient(ClientHandler client) {
+        clients.remove(client);
     }
 
 }

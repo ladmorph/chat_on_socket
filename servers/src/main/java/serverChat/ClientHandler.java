@@ -4,26 +4,29 @@ import dao.UserDao;
 
 import java.io.*;
 import java.net.Socket;
-import java.nio.charset.Charset;
+import java.util.logging.Logger;
 
 public class ClientHandler implements Runnable {
 
-
-    private Socket socket;
     private ServerChat server;
+    private ServerChatConfiguration cfg;
 
     private BufferedWriter writer;
-
     private BufferedReader reader;
 
+    private static final Logger logger = Logger.getLogger(ClientHandler.class.getName());
+    private int countsOfClient = 0;
+    private Object object = new Object();
 
-    public ClientHandler(Socket socket, ServerChat server) {
-        this.socket = socket;
+    public ClientHandler(Socket socket, ServerChat server, ServerChatConfiguration cfg) {
+        countsOfClient++;
+
         this.server = server;
+        this.cfg = cfg;
 
         try {
-            writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), Charset.forName("UTF-8")));
-            reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), Charset.forName("UTF-8")));
+            writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+            reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -31,12 +34,11 @@ public class ClientHandler implements Runnable {
 
     public void run() {
 
-        while (true) {
-            String message = null;
-            String username = null;
-            try {
+        try {
+            while (true) {
+                String username = null;
                 if (reader.ready()) {
-                    message = reader.readLine();
+                    String message = reader.readLine();
                     int indexOf;
 
                     if ((indexOf = message.indexOf(":")) != -1)
@@ -49,18 +51,26 @@ public class ClientHandler implements Runnable {
                     userDao.updateMessagesByUsername(username, count);
                     server.sendMessageToAll(message);
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            close();
         }
+
     }
 
     public void sendMessage(String message) {
         try {
             writer.write(message + "\n");
             writer.flush();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void close() {
+        server.removeClient(this);
+        countsOfClient--;
     }
 }

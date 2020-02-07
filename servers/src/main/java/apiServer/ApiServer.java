@@ -1,5 +1,6 @@
 package apiServer;
 
+import authServer.AuthServer;
 import com.google.gson.Gson;
 import dao.UserDao;
 
@@ -7,13 +8,17 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class ApiServer {
 
-    ApiServerConfiguration cfg;
+    private ApiServerConfiguration cfg;
     private ServerSocket serverSocketInfo;
+
     private BufferedReader reader;
     private BufferedWriter writer;
+
+    private static final Logger logger = Logger.getLogger(ApiServer.class.getName());
 
     public ApiServer(ApiServerConfiguration cfg) {
         this.cfg = cfg;
@@ -25,7 +30,7 @@ public class ApiServer {
             public void run() {
                 try {
                     serverSocketInfo = new ServerSocket(cfg.getPort());
-                    System.out.println("Starting server with 9090 port");
+                    logger.info("ServerChat starting with: " + cfg.getPort() + " port!");
                     while (true) {
                         Socket socket = serverSocketInfo.accept();
                         reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));

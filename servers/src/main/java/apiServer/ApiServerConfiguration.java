@@ -8,8 +8,9 @@ public class ApiServerConfiguration {
         return port;
     }
 
-    public void setPort(int port) {
+    public ApiServerConfiguration setPort(int port) {
         this.port = port;
+        return this;
     }
 }
 

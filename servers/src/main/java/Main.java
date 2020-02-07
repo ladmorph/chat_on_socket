@@ -12,15 +12,17 @@ public class Main {
 
     public static void main(String[] args) throws IOException, InterruptedException {
 
-        ServerChatConfiguration chatCfg = new ServerChatConfiguration();
-        chatCfg.setPort(8080);
-        ServerChat serverChat = new ServerChat(chatCfg);
+        ServerChatConfiguration chatCfg = new ServerChatConfiguration()
+                .setNotificationTime(5000)
+                .setServerPort(8080);
 
-        ApiServerConfiguration apiCfg = new ApiServerConfiguration();
-        apiCfg.setPort(9090);
+        ApiServerConfiguration apiCfg = new ApiServerConfiguration()
+                .setPort(9090);
+
         ApiServer apiServer = new ApiServer(apiCfg);
-
+        ServerChat serverChat = new ServerChat(chatCfg);
         AuthServer authServer = new AuthServer();
+
 
 
         List<Thread> threads = new ArrayList<>();

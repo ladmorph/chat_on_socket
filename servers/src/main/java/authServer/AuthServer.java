@@ -29,6 +29,8 @@ public class AuthServer {
                 try {
                     serverSocket = new ServerSocket(7070);
                     logger.info("ServerChat starting with: 7070 port!");
+
+
                     while (true) {
                         Socket socket = serverSocket.accept();
                         reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));

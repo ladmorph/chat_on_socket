@@ -13,7 +13,6 @@ public class Main {
     public static void main(String[] args) throws IOException, InterruptedException {
 
         ServerChatConfiguration chatCfg = new ServerChatConfiguration()
-                .setNotificationTime(5000)
                 .setServerPort(8080);
 
         ApiServerConfiguration apiCfg = new ApiServerConfiguration()

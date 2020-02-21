@@ -1,4 +1,4 @@
-###Simple network chat using sockets.
+# Simple network chat using sockets.
 
 Window for entering the username:
 
@@ -8,7 +8,7 @@ Then the chat itself opens:
 
 ![chat](servers/src/main/resources/chat.png)
 
-##Configuration
+## Configuration
 
 You can configure which ports the servers will run on along the way:
 servers/src/main/java/Main.java

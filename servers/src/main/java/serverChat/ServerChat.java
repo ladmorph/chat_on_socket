@@ -45,7 +45,7 @@ public class ServerChat {
                 }
             }
         };
-        return thread;
+        return thread; //return the thread to restart it in case of an error
     }
 
     public void removeClient(ClientHandler client) {

@@ -19,6 +19,7 @@ public class AuthServer {
     private BufferedWriter writer;
 
     private static final Logger logger = Logger.getLogger(AuthServer.class.getName());
+    private final int PORT = 7070;
 
     public AuthServer() {}
 
@@ -27,8 +28,8 @@ public class AuthServer {
             @Override
             public void run() {
                 try {
-                    serverSocket = new ServerSocket(7070);
-                    logger.info("ServerChat starting with: 7070 port!");
+                    serverSocket = new ServerSocket(PORT);
+                    logger.info("AuthServer starting with: " + PORT + " port!");
 
 
                     while (true) {
@@ -43,8 +44,8 @@ public class AuthServer {
                         int count = 0;
 
                         try {
-                            count = userDao.getMessages(username);
-                        } catch (javax.persistence.NoResultException ignored) {
+                            count = userDao.getMessages(username); // we get the number of messages
+                        } catch (javax.persistence.NoResultException ignored) {  // if such a user does not exist we process the exception
                         }
 
                         User user = new User()
@@ -53,9 +54,9 @@ public class AuthServer {
                                 .setMessages(count);
 
                         try {
-                            userDao.save(user);
+                            userDao.save(user); // trying to save the user
                         } catch (org.hibernate.exception.ConstraintViolationException ex) {
-                            userDao.updateByUsername(user);
+                            userDao.updateByUsername(user); // if the user exists
                         }
 
                         writer.write("Вы успешно зашли!" + "\n");
@@ -68,6 +69,6 @@ public class AuthServer {
             }
         });
         thread.start();
-        return thread;
+        return thread; //return the thread to restart it in case of an error
     }
 }

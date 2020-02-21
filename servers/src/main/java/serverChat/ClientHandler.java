@@ -4,23 +4,21 @@ import dao.UserDao;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.logging.Logger;
 
 public class ClientHandler implements Runnable {
 
     private ServerChat server;
     private ServerChatConfiguration cfg;
-
     private BufferedWriter writer;
     private BufferedReader reader;
 
-    private static final Logger logger = Logger.getLogger(ClientHandler.class.getName());
-    private int countsOfClient = 0;
-    private Object object = new Object();
-
+    /**
+     * @param socket This is the client socket, we use it for processing and sending messages
+     * @param server We use the server to delete
+     *               and send a message to all users.
+     * @param cfg    The configuration of the chat server.
+     */
     public ClientHandler(Socket socket, ServerChat server, ServerChatConfiguration cfg) {
-        countsOfClient++;
-
         this.server = server;
         this.cfg = cfg;
 
@@ -38,11 +36,11 @@ public class ClientHandler implements Runnable {
             while (true) {
                 String username = null;
                 if (reader.ready()) {
-                    String message = reader.readLine();
+                    String message = reader.readLine(); //The following message always comes here: {username: message}
                     int indexOf;
 
                     if ((indexOf = message.indexOf(":")) != -1)
-                        username = message.substring(0, indexOf);
+                        username = message.substring(0, indexOf); // getting a username from message
 
                     UserDao userDao = new UserDao();
 
@@ -71,6 +69,5 @@ public class ClientHandler implements Runnable {
 
     public void close() {
         server.removeClient(this);
-        countsOfClient--;
     }
 }

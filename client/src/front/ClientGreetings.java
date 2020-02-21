@@ -12,7 +12,7 @@ import java.net.Socket;
 public class ClientGreetings extends JFrame {
 
     private final String HOST = "localhost";
-    private final int PORT = 7070;
+    private final int PORT = 7070; // default port for saving and authorizing a user
 
     private JTextField usernameField;
     private JButton jButton;
@@ -54,6 +54,10 @@ public class ClientGreetings extends JFrame {
         });
     }
 
+    /**
+     * We connect to the Auth server, which in turn authorizes and saves the user,
+     * and then sends it to the chat
+     */
     public void saveUser() {
         try {
             Socket socket = new Socket(HOST, PORT);

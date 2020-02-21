@@ -24,7 +24,7 @@ public class Main {
 
 
 
-        List<Thread> threads = new ArrayList<>();
+        List<Thread> threads = new ArrayList<>(); //creating a list of our server threads
         threads.add(serverChat.start());
         threads.add(apiServer.start());
         threads.add(authServer.start());

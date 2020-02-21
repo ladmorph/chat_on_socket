@@ -1,6 +1,5 @@
 package apiServer;
 
-import authServer.AuthServer;
 import com.google.gson.Gson;
 import dao.UserDao;
 
@@ -13,7 +12,7 @@ import java.util.logging.Logger;
 public class ApiServer {
 
     private ApiServerConfiguration cfg;
-    private ServerSocket serverSocketInfo;
+    private ServerSocket serverSocket;
 
     private BufferedReader reader;
     private BufferedWriter writer;
@@ -29,14 +28,17 @@ public class ApiServer {
             @Override
             public void run() {
                 try {
-                    serverSocketInfo = new ServerSocket(cfg.getPort());
+                    serverSocket = new ServerSocket(cfg.getPort());
                     logger.info("ServerChat starting with: " + cfg.getPort() + " port!");
                     while (true) {
-                        Socket socket = serverSocketInfo.accept();
+
+                        Socket socket = serverSocket.accept();
                         reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                         writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+
                         UserDao userDao = new UserDao();
                         List list = userDao.getAllUsers();
+
                         String json = new Gson().toJson(list);
                         String response = "HTTP/1.1 200 OK\r\n" +
                                 "Server: ChatSocket\r\n" +
@@ -44,10 +46,10 @@ public class ApiServer {
                                 "Content-Length: " + json.getBytes().length + "\r\n" +
                                 "Connection: close\r\n\r\n";
                         String result = response + json;
+
                         OutputStream outputStream = socket.getOutputStream();
                         outputStream.write(result.getBytes("UTF-8"));
                         outputStream.flush();
-
 
                     }
                 } catch (IOException e) {
@@ -56,6 +58,6 @@ public class ApiServer {
             }
         });
         thread.start();
-        return thread;
+        return thread; //return the thread to restart it in case of an error
     }
 }

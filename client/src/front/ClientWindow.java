@@ -1,5 +1,7 @@
 package front;
 
+import serverChat.ServerChatConfiguration;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -8,8 +10,9 @@ import java.net.Socket;
 
 public class ClientWindow extends JFrame {
 
+
     private static final String HOST = "localhost";
-    private static final int PORT = 8080;
+    private static final int PORT = 8080; // default port for sending messages to the server
 
     private Socket clientSocket;
 

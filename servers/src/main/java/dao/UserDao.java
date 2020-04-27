@@ -13,16 +13,19 @@ public class UserDao {
     public void save(User user) {
         Session session = HibernateSessionFactory.getSessionFactory().openSession();
         session.save(user);
+        session.close();
     }
 
     public void update(User user) {
         Session session = HibernateSessionFactory.getSessionFactory().openSession();
         session.update(user);
+        session.close();
     }
 
     public void delete(User user) {
         Session session = HibernateSessionFactory.getSessionFactory().openSession();
         session.delete(user);
+        session.close();
     }
 
     public int getMessages(String username) {
@@ -35,6 +38,7 @@ public class UserDao {
     public void saveOrUpdate(User user) {
         Session session = HibernateSessionFactory.getSessionFactory().openSession();
         session.saveOrUpdate(user);
+        session.close();
     }
 
     public void updateByUsername(User user) {
@@ -50,6 +54,7 @@ public class UserDao {
         query.executeUpdate();
 
         tx.commit();
+        session.close();
     }
 
     public void updateMessagesByUsername(String username, int messages) {
@@ -60,6 +65,7 @@ public class UserDao {
                 ("UPDATE users SET messages = " + messages + " WHERE username = '" + username + "'");
         query.executeUpdate();
         tx.commit();
+        session.close();
     }
 
     public List<User> getAllUsers() {

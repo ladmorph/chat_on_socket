@@ -20,6 +20,13 @@ client/src/front/ClientGreetings.java
 
 client/src/front/ClientWindow.java
 
+Technologies
+------------
+Project is created with:
+* Java version: 8
+* Hibernate
+* Google gson
+* MySQL: 8.0.19
 
 
 
